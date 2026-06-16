@@ -1,0 +1,87 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =========================
+# Virtual Environment
+# =========================
+venv/
+.env/
+
+# =========================
+# Environment Variables
+# =========================
+.env
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+outputs/logs/
+
+# =========================
+# Pytest
+# =========================
+.pytest_cache/
+
+# =========================
+# Coverage
+# =========================
+.coverage
+htmlcov/
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# OS Files
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# ChromaDB
+# =========================
+backend/data/vector_store/
+backend/data/chroma_db/
+
+# =========================
+# Embeddings Cache
+# =========================
+backend/data/embeddings/
+
+# =========================
+# HuggingFace Cache
+# =========================
+.cache/
+huggingface/
+
+# =========================
+# Build Files
+# =========================
+dist/
+build/
+
+# =========================
+# Output Files
+# =========================
+outputs/results.json
+outputs/submission.json
+outputs/submission.zip
+
+# =========================
+# Temporary Files
+# =========================
+*.tmp
+*.bak

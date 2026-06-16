@@ -1,0 +1,59 @@
+# =========================
+# FastAPI
+# =========================
+fastapi
+uvicorn[standard]
+
+# =========================
+# LangChain
+# =========================
+langchain
+langchain-community
+langchain-chroma
+langchain-huggingface
+
+# =========================
+# Vector Database
+# =========================
+chromadb
+
+# =========================
+# Embedding Models
+# =========================
+sentence-transformers
+torch
+
+# =========================
+# Document Processing
+# =========================
+pypdf
+
+# =========================
+# LLM
+# =========================
+google-generativeai
+
+# =========================
+# Config
+# =========================
+python-dotenv
+
+# =========================
+# Validation
+# =========================
+pydantic
+
+# =========================
+# Logging & Utilities
+# =========================
+tqdm
+
+# =========================
+# Testing
+# =========================
+pytest
+
+# =========================
+# HTTP Requests
+# =========================
+requests
