@@ -42,6 +42,7 @@ python-dotenv
 # Validation
 # =========================
 pydantic
+pydantic-settings
 
 # =========================
 # Logging & Utilities
