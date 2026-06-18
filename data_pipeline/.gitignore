@@ -1,0 +1,10 @@
+# Raw crawled HTML dumps — quá nặng (~150 MB), không track trên git
+# Chạy vbpl_crawler.py để tái tạo
+data/raw/
+
+# Log files sinh ra lúc chạy pipeline
+*.log
+
+# Python cache
+__pycache__/
+*.pyc
