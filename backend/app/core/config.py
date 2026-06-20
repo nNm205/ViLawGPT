@@ -1,3 +1,4 @@
+from typing import ClassVar
 from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -5,12 +6,12 @@ class Settings(BaseSettings):
     # =========================
     # Base Paths
     # =========================
-    BASE_DIR = Path(__file__).resolve().parents[2]
-    DATA_DIR = BASE_DIR / "data"                 # backend/data
-    RAW_DATA_DIR = DATA_DIR / "raw"              # backend/data/raw
-    PROCESSED_DATA_DIR = DATA_DIR / "processed"  # backend/data/processed
-    VECTOR_STORE_DIR = DATA_DIR / "vector_store" # backend/data/vector_store
-    EMBEDDINGS_DIR = DATA_DIR / "embeddings"     # backend/data/embeddings
+    BASE_DIR: ClassVar[Path] = Path(__file__).parent.parent.parent.parent
+    DATA_DIR: ClassVar[Path] = BASE_DIR / "data"                 # backend/data
+    RAW_DATA_DIR: ClassVar[Path] = DATA_DIR / "raw"              # backend/data/raw
+    PROCESSED_DATA_DIR: ClassVar[Path] = DATA_DIR / "processed"  # backend/data/processed
+    VECTOR_STORE_DIR: ClassVar[Path] = DATA_DIR / "vector_store" # backend/data/vector_store
+    EMBEDDINGS_DIR: ClassVar[Path] = DATA_DIR / "embeddings"     # backend/data/embeddings
 
     # =========================
     # Environment
@@ -44,7 +45,7 @@ class Settings(BaseSettings):
     # Chroma
     # =========================
     CHROMA_COLLECTION_NAME: str = "vilawgpt"
-    CHROMA_DB_PATH: str = "data/vector_store/chroma_db"
+    CHROMA_DB_PATH: ClassVar[Path] = DATA_DIR / "vector_store/chroma_db"
 
     model_config = SettingsConfigDict(
         env_file=".env",
