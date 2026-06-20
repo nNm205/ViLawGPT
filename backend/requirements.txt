@@ -27,6 +27,7 @@ torch
 # Document Processing
 # =========================
 pypdf
+python-docx
 
 # =========================
 # LLM
