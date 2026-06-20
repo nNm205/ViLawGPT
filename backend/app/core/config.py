@@ -22,7 +22,7 @@ class Settings(BaseSettings):
     # =========================
     # Gemini
     # =========================
-    GOOGLE_API_KEY: str
+    GEMINI_API_KEY: str
 
     # =========================
     # Models
