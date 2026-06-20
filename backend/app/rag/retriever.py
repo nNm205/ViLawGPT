@@ -1,6 +1,6 @@
 import chromadb 
 from app.core.config import settings
-from embedding import EmbeddingModel
+from app.rag.embedding import EmbeddingModel
 
 class Retriever:
     def __init__(self):
@@ -13,8 +13,23 @@ class Retriever:
         results = self.collection.query(
             query_embeddings=[query_embedding.tolist()],
             n_results=top_k,
+            include=[
+                "documents",
+                "metadatas",
+                "distances"
+            ]
         )
-        return results 
+
+        retrieved_chunks = []
+        for i in range(len(results["ids"][0])):
+            retrieved_chunks.append({
+                "chunk_id": results["ids"][0][i],
+                "text": results["documents"][0][i],
+                "score": 1 - results["distances"][0][i],
+                "metadata": results["metadatas"][0][i]
+            })
+
+        return retrieved_chunks 
 
 if __name__ == "__main__":
     retriever = Retriever()

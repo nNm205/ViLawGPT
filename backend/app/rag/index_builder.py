@@ -78,7 +78,9 @@ def main():
                 {
                     "document_id": chunk["document_id"],
                     "article_number": chunk["article_number"],
-                    "title": chunk["document_title"]
+                    "document_title": chunk["document_title"],
+                    "so_hieu": chunk["metadata"]["so_hieu"],
+                    "loai_van_ban": chunk["metadata"]["loai_van_ban"]
                 } 
                 for chunk in batch_chunks
             ]
