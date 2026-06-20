@@ -54,7 +54,7 @@ def main():
             client.delete_collection(settings.CHROMA_COLLECTION_NAME)
             logger.info("Deleted existing collection %s", settings.CHROMA_COLLECTION_NAME)
         except Exception:
-            logger.exception("Collection '%s' does not exist. Creating new one.", settings.CHROMA_COLLECTION_NAME) 
+            logger.info("Collection '%s' does not exist", settings.CHROMA_COLLECTION_NAME) 
 
         collection = client.get_or_create_collection(name=settings.CHROMA_COLLECTION_NAME)
 
