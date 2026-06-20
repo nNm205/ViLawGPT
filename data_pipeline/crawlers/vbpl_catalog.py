@@ -11,8 +11,9 @@ from datetime import datetime
 # CONSTANTS
 ######################################################
 
-INPUT_DIR = Path("data/processed/json")
-OUTPUT_FILE = Path("data/catalog.json")
+BASE_DIR = Path(__file__).parent.parent.parent
+INPUT_DIR = BASE_DIR / "data/processed/json"
+OUTPUT_FILE = BASE_DIR / "data/catalog.json"
 
 ######################################################
 # LOGGING

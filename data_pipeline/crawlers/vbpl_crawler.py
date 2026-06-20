@@ -35,7 +35,8 @@ DOCUMENT_IDS = [
     158783, 158782
 ]
 
-OUTPUT_DIR = Path("data/raw/json")
+BASE_DIR = Path(__file__).parent.parent.parent 
+OUTPUT_DIR = BASE_DIR / "data/raw/json"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 PAGE_TIMEOUT = 30_000
 TAB_WAIT_MS = 2_000

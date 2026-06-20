@@ -10,8 +10,9 @@ from bs4 import BeautifulSoup
 # PATHS
 ######################################################
 
-INPUT_DIR = Path("data/raw/json")
-OUTPUT_DIR = Path("data/processed/json")
+BASE_DIR = Path(__file__).parent.parent.parent
+INPUT_DIR = BASE_DIR / "data/raw/json"
+OUTPUT_DIR = BASE_DIR / "data/processed/json"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 ######################################################

@@ -3,8 +3,8 @@ from pathlib import Path
 from models.document import VbplDocument
 
 class DocumentRepository:
-    def __init__(self, data_dir: str):
-        self.data_dir = Path(data_dir)
+    def __init__(self, data_dir: Path):
+        self.data_dir = data_dir
 
     def load(self, doc_id: str):
         path = self.data_dir / f"{doc_id}.json"
