@@ -46,7 +46,7 @@ if __name__ == "__main__":
     
     result = pipeline.ask(
         question_id=1,
-        question="Doanh nghiệp tư nhân có được phát hành cổ phần không?"
+        question="Các cơ sở ươm tạo và khu làm việc chung được hưởng những chính sách hỗ trợ nào về thuế và đất đai?"
     )
 
     print(result)

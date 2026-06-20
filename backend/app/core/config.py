@@ -28,7 +28,8 @@ class Settings(BaseSettings):
     # Models
     # =========================
     EMBEDDING_MODEL: str = "BAAI/bge-m3"
-    LLM_MODEL: str = "gemini-2.5-flash"
+    LLM_MODEL: str = "Qwen/Qwen3-8B-Instruct"
+    USE_4BIT: bool = True
 
     # =========================
     # Retrieval

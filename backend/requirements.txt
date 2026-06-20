@@ -1,16 +1,9 @@
+
 # =========================
 # FastAPI
 # =========================
 fastapi
 uvicorn[standard]
-
-# =========================
-# LangChain
-# =========================
-langchain
-langchain-community
-langchain-chroma
-langchain-huggingface
 
 # =========================
 # Vector Database
@@ -24,13 +17,21 @@ sentence-transformers
 torch
 
 # =========================
+# HuggingFace Stack (LLM local / optional)
+# =========================
+transformers
+accelerate
+sentencepiece
+# bitsandbytes ; platform_system != "Windows"
+
+# =========================
 # Document Processing
 # =========================
 pypdf
 python-docx
 
 # =========================
-# LLM
+# LLM API (Gemini)
 # =========================
 google-generativeai
 
@@ -38,24 +39,16 @@ google-generativeai
 # Config
 # =========================
 python-dotenv
-
-# =========================
-# Validation
-# =========================
 pydantic
 pydantic-settings
 
 # =========================
-# Logging & Utilities
+# Utilities
 # =========================
 tqdm
+requests
 
 # =========================
 # Testing
 # =========================
 pytest
-
-# =========================
-# HTTP Requests
-# =========================
-requests
