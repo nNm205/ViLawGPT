@@ -86,4 +86,4 @@ outputs/submission.zip
 *.tmp
 *.bak
 
-data/raw/
+data/
