@@ -17,23 +17,10 @@ sentence-transformers
 torch
 
 # =========================
-# HuggingFace Stack (LLM local / optional)
-# =========================
-transformers
-accelerate
-sentencepiece
-# bitsandbytes ; platform_system != "Windows"
-
-# =========================
 # Document Processing
 # =========================
 pypdf
 python-docx
-
-# =========================
-# LLM API (Gemini)
-# =========================
-google-generativeai
 
 # =========================
 # Config
@@ -52,3 +39,8 @@ requests
 # Testing
 # =========================
 pytest
+
+# =========================
+# OpenAI 
+# =========================
+openai

@@ -27,9 +27,9 @@ class Settings(BaseSettings):
     # =========================
     # Models
     # =========================
-    EMBEDDING_MODEL: str = "BAAI/bge-m3"
-    LLM_MODEL: str = "Qwen/Qwen3-8B-Instruct"
-    USE_4BIT: bool = True
+    EMBEDDING_MODEL: str
+    LLM_BASE_URL: str
+    LLM_MODEL: str
 
     # =========================
     # Retrieval
@@ -47,6 +47,11 @@ class Settings(BaseSettings):
     # =========================
     CHROMA_COLLECTION_NAME: str = "vilawgpt"
     CHROMA_DB_PATH: ClassVar[Path] = DATA_DIR / "vector_store/chroma_db"
+    
+    # =========================
+    # HuggingFace
+    # =========================
+    HUGGINGFACE_HUB_TOKEN: str 
 
     model_config = SettingsConfigDict(
         env_file=".env",
