@@ -103,15 +103,15 @@ def main():
             documents = texts
             metadatas = [
                 {
-                    "document_id": str(chunk["document_id"]),
-                    "document_title": chunk["document_title"],
-                    "article_number": int(chunk.get("article_number", 0)),
-                    "clause_number": int(chunk.get("clause_number", 0)),
-                    "point_number": str(chunk.get("point_number", "")),
-                    "so_hieu": chunk["metadata"].get("so_hieu", ""),
-                    "loai_van_ban": chunk["metadata"].get("loai_van_ban", ""),
-                    "co_quan_ban_hanh": chunk["metadata"].get("co_quan_ban_hanh", ""),
-                    "trang_thai_hieu_luc": chunk["metadata"].get("trang_thai_hieu_luc", ""),
+                    "document_id": str(chunk.get("document_id") or ""),
+                    "document_title": str(chunk.get("document_title") or ""),
+                    "article_number": int(chunk.get("article_number") or 0),
+                    "clause_number": int(chunk.get("clause_number") or 0),
+                    "point_number": str(chunk.get("point_number") or ""),
+                    "so_hieu": str(chunk["metadata"].get("so_hieu") or ""),
+                    "loai_van_ban": str(chunk["metadata"].get("loai_van_ban") or ""),
+                    "co_quan_ban_hanh": str(chunk["metadata"].get("co_quan_ban_hanh") or ""),
+                    "trang_thai_hieu_luc": str(chunk["metadata"].get("trang_thai_hieu_luc") or ""),
                     "chunk_length": len(chunk["text"])
                 } 
                 for chunk in batch_chunks
