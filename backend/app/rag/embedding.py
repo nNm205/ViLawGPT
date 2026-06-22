@@ -1,4 +1,4 @@
-impor torch 
+import torch 
 import numpy as np 
 from sentence_transformers import SentenceTransformer
 from app.core.config import settings
