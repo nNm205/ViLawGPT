@@ -105,7 +105,7 @@ def main():
                 {
                     "document_id": str(chunk["document_id"]),
                     "document_title": chunk["document_title"],
-                    "article_number": int(chunk.get("article_number"), 0),
+                    "article_number": int(chunk.get("article_number", 0)),
                     "clause_number": int(chunk.get("clause_number", 0)),
                     "point_number": str(chunk.get("point_number", "")),
                     "so_hieu": chunk["metadata"].get("so_hieu", ""),
