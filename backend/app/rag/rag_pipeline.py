@@ -47,7 +47,7 @@ if __name__ == "__main__":
     
     result = pipeline.ask(
         question_id=2,
-        question="Doanh nghiệp nhỏ và vừa được hưởng ưu đãi gì khi tham gia đấu thầu?"
+        question="Doanh nghiệp nhỏ và vừa phải đáp ứng điều kiện nào để được hỗ trợ theo Luật Hỗ trợ doanh nghiệp nhỏ và vừa?"
     )
 
     print(result)
