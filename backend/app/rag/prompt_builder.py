@@ -16,10 +16,18 @@ class PromptBuilder:
 
         for chunk in chunks:
             metadata = chunk.get("metadata", {})
+            article_number = metadata.get("article_number", "")
+            clause_number = metadata.get("clause_number", 0)
+
+            if clause_number and clause_number > 0:
+                location = f"Điều {article_number}, Khoản {clause_number}"
+            else:
+                location = f"Điều {article_number}"
+
             context_parts.append(f"""
                 Văn bản: {metadata.get("document_title", "")}
                 Số hiệu: {metadata.get("so_hieu", "")}
-                Điều: {metadata.get("article_number", "")}
+                {location}
 
                 Nội dung: {chunk.get("text", "")}
             """)

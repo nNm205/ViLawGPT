@@ -43,9 +43,16 @@ def build_catalog_lookup(catalog: list[dict]) -> dict:
 
     return lookup
 
-def parse_article_key(key: str) -> tuple[str, int]:
-    document_id, article_number = key.rsplit("_", 1)
-    return document_id, int(article_number)
+def parse_article_key(key: str) -> tuple[str, int, int]:
+    """
+    Parse chunk key có dạng "{doc_id}_{dieu_id}_{khoan_id}".
+    khoan_id = 0 có nghĩa là điều không có khoản (toàn bộ điều là một chunk).
+    """
+    parts = key.rsplit("_", 2)
+    if len(parts) != 3:
+        raise ValueError(f"Invalid chunk key format: {key!r}")
+    document_id, article_number, clause_number = parts
+    return document_id, int(article_number), int(clause_number)
 
 # =====================================================
 # CHUNKING
@@ -60,7 +67,7 @@ def build_chunks(
 
     for article_key, article_text in articles.items():
         try:
-            document_id, article_number = parse_article_key(article_key)
+            document_id, article_number, clause_number = parse_article_key(article_key)
         except Exception:
             logger.warning(f"Cannot parse article key: {article_key}")
             continue
@@ -76,6 +83,7 @@ def build_chunks(
             "document_id": document_id,
             "document_title": metadata["document_title"],
             "article_number": article_number,
+            "clause_number": clause_number,   # 0 = toàn điều, >0 = số khoản
             "text": article_text,
             "metadata": {
                 "so_hieu": metadata["so_hieu"],

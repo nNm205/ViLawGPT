@@ -45,8 +45,8 @@ if __name__ == "__main__":
     pipeline = RAGPipeline()
     
     result = pipeline.ask(
-        question_id=1,
-        question="Các cơ sở ươm tạo và khu làm việc chung được hưởng những chính sách hỗ trợ nào về thuế và đất đai?"
+        question_id=2,
+        question="Doanh nghiệp nhỏ và vừa được hưởng ưu đãi gì khi tham gia đấu thầu?"
     )
 
     print(result)
