@@ -17,13 +17,14 @@ class RAGPipeline:
             top_k=5
         )
 
-        prompt = self.prompt_builder.build(
+        system_prompt, user_prompt = self.prompt_builder.build(
             question=question,
             chunks=retrieved_chunks
         )
 
         answer = self.generator.generate(
-            prompt=prompt
+            system_prompt=system_prompt,
+            user_prompt=user_prompt
         )
 
         relevant_docs, relevant_articles = (

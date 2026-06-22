@@ -2,21 +2,40 @@ from __future__ import annotations
 import json
 import logging
 from pathlib import Path
+from app.core.logger import setup_logger
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+# =====================================================
+# CONSTANTS
+# =====================================================
+
+MAX_CHUNK_SIZE = 2000
+CHUNK_OVERLAP = 200
 
 # =====================================================
 # PATHS
 # =====================================================
+
 BASE_DIR = Path(__file__).parent.parent.parent.parent
 ARTICLES_FILE = BASE_DIR / "data/articles.json"
 CATALOG_FILE = BASE_DIR / "data/catalog.json"
 OUTPUT_FILE = BASE_DIR / "data/processed/chunks.json"
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+# =====================================================
+# LOGGING
+# =====================================================
 
-logger = logging.getLogger(__name__)
+logger = setup_logger(__name__)
+
+# =====================================================
+# SPLITTER
+# =====================================================
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=MAX_CHUNK_SIZE,
+    chunk_overlap=CHUNK_OVERLAP,
+    separators=["\n\n", "\n", ". ", "; ", " "]
+)
 
 # =====================================================
 # HELPERS
@@ -43,16 +62,34 @@ def build_catalog_lookup(catalog: list[dict]) -> dict:
 
     return lookup
 
-def parse_article_key(key: str) -> tuple[str, int, int]:
-    """
-    Parse chunk key có dạng "{doc_id}_{dieu_id}_{khoan_id}".
-    khoan_id = 0 có nghĩa là điều không có khoản (toàn bộ điều là một chunk).
-    """
-    parts = key.rsplit("_", 2)
-    if len(parts) != 3:
-        raise ValueError(f"Invalid chunk key format: {key!r}")
-    document_id, article_number, clause_number = parts
-    return document_id, int(article_number), int(clause_number)
+def parse_article_key(key: str):
+    parts = key.rsplit("_")
+
+    if len(parts) == 3:
+        document_id, article_number, clause_number = parts 
+        return {
+            "document_id": document_id,
+            "article_number": int(article_number),
+            "clause_number": int(clause_number),
+            "point_number": None 
+        }
+
+    if len(parts) == 4:
+        document_id, article_number, clause_number, point_number = parts 
+        return {
+            "document_id": document_id,
+            "article_number": int(article_number),
+            "clause_number": int(clause_number),
+            "point_number": point_number 
+        }
+
+    raise ValueError(f"Invalid key: {key}")
+
+def split_text(text: str) -> list[str]:
+    if len(text) <= MAX_CHUNK_SIZE:
+        return [text]
+    
+    return splitter.split_text(text)
 
 # =====================================================
 # CHUNKING
@@ -64,41 +101,55 @@ def build_chunks(
 ) -> list[dict]:
     chunks = []
     total_missing_docs = 0
+    total_split_chunks = 0
 
     for article_key, article_text in articles.items():
         try:
-            document_id, article_number, clause_number = parse_article_key(article_key)
+            parsed = parse_article_key(article_key)
         except Exception:
-            logger.warning(f"Cannot parse article key: {article_key}")
+            logger.warning(f"Cannot parse key: {article_key}")
             continue
 
+        document_id = parsed["document_id"]
         metadata = catalog_lookup.get(document_id)
         if metadata is None:
             total_missing_docs += 1
             logger.warning(f"Document metadata not found: {document_id}")
             continue
 
-        chunk = {
-            "chunk_id": article_key,
-            "document_id": document_id,
-            "document_title": metadata["document_title"],
-            "article_number": article_number,
-            "clause_number": clause_number,   # 0 = toàn điều, >0 = số khoản
-            "text": article_text,
-            "metadata": {
-                "so_hieu": metadata["so_hieu"],
-                "loai_van_ban": metadata["loai_van_ban"],
-                "co_quan_ban_hanh": metadata["co_quan_ban_hanh"],
-                "ngay_ban_hanh": metadata["ngay_ban_hanh"],
-                "trang_thai_hieu_luc": metadata["trang_thai_hieu_luc"],
-                "url_chi_tiet": metadata["url_chi_tiet"],
-            }
-        }
+        text_parts = split_text(article_text)
+        if len(text_parts) > 1:
+            total_split_chunks += 1
 
-        chunks.append(chunk)
+        for idx, text_part in enumerate(text_parts):
+            chunk_id = article_key
+
+            if len(text_part) > 1:
+                chunk_id = f"{article_key}_{idx}"
+
+            chunk = {
+                "chunk_id": chunk_id,
+                "document_id": document_id,
+                "document_title": metadata["document_title"],
+                "article_number": parsed["article_number"],
+                "clause_number": parsed["clause_number"],
+                "point_number": parsed["point_number"],   
+                "text": text_part,
+                "metadata": {
+                    "so_hieu": metadata["so_hieu"],
+                    "loai_van_ban": metadata["loai_van_ban"],
+                    "co_quan_ban_hanh": metadata["co_quan_ban_hanh"],
+                    "ngay_ban_hanh": metadata["ngay_ban_hanh"],
+                    "trang_thai_hieu_luc": metadata["trang_thai_hieu_luc"],
+                    "url_chi_tiet": metadata["url_chi_tiet"],
+                }
+            }
+
+            chunks.append(chunk)
 
     logger.info(f"Total chunks: {len(chunks)}")
     logger.info(f"Missing documents: {total_missing_docs}")
+    logger.info(f"Split chunks: {total_split_chunks}")
 
     return chunks
 
@@ -122,11 +173,18 @@ def save_chunks(chunks: list[dict]):
 def main():
     logger.info("Loading articles...")
     articles = load_json(ARTICLES_FILE)
+
     logger.info("Loading catalog...")
     catalog = load_json(CATALOG_FILE)
+    
     catalog_lookup = build_catalog_lookup(catalog)
+    
     logger.info("Building chunks...")
-    chunks = build_chunks(articles=articles, catalog_lookup=catalog_lookup)
+    chunks = build_chunks(
+        articles=articles, 
+        catalog_lookup=catalog_lookup
+    )
+    
     save_chunks(chunks)
     logger.info("Done")
 

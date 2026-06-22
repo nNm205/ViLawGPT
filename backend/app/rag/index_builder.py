@@ -25,6 +25,10 @@ BATCH_SIZE = 128
 
 def main():
     try:
+        # =====================================================
+        # Load chunks
+        # =====================================================
+
         logger.info("Loading chunks from %s", CHUNKS_FILE)
         
         with open(CHUNKS_FILE, "r", encoding="utf-8") as f:
@@ -46,24 +50,48 @@ def main():
         # ChromaDB
         # =====================================================
 
-        logger.info("Connecting to ChromaDB at %s", settings.CHROMA_DB_PATH)
+        logger.info(
+            "Connecting to ChromaDB at %s", 
+            settings.CHROMA_DB_PATH
+        )
 
-        client = chromadb.PersistentClient(path=settings.CHROMA_DB_PATH)
+        client = chromadb.PersistentClient(
+            path=settings.CHROMA_DB_PATH
+        )
 
         try:
-            client.delete_collection(settings.CHROMA_COLLECTION_NAME)
-            logger.info("Deleted existing collection %s", settings.CHROMA_COLLECTION_NAME)
+            client.delete_collection(
+                settings.CHROMA_COLLECTION_NAME
+            )
+            
+            logger.info(
+                "Deleted existing collection %s", 
+                settings.CHROMA_COLLECTION_NAME
+            )
         except Exception:
-            logger.info("Collection '%s' does not exist", settings.CHROMA_COLLECTION_NAME) 
+            logger.info(
+                "Collection '%s' does not exist", 
+                settings.CHROMA_COLLECTION_NAME
+            ) 
 
-        collection = client.get_or_create_collection(name=settings.CHROMA_COLLECTION_NAME)
+        collection = client.get_or_create_collection(
+            name=settings.CHROMA_COLLECTION_NAME
+        )
 
-        logger.info("Created collection '%s'", settings.CHROMA_COLLECTION_NAME)
+        logger.info(
+            "Created collection '%s'", 
+            settings.CHROMA_COLLECTION_NAME
+        )
 
         # =====================================================
         # Building index 
         # =====================================================
-        logger.info("Building vector index with batch size = %s", BATCH_SIZE)
+
+        logger.info(
+            "Building vector index with batch size = %s", 
+            BATCH_SIZE
+        )
+
         for i in tqdm(
             range(0, len(chunks), BATCH_SIZE), 
             desc="Building Chroma Index"
@@ -71,17 +99,20 @@ def main():
             batch_chunks = chunks[i:i + BATCH_SIZE]
             texts = [chunk["text"] for chunk in batch_chunks]
             embeddings = model.encode_texts(texts)
-
             ids = [chunk["chunk_id"] for chunk in batch_chunks]
-            documents = [chunk["text"] for chunk in batch_chunks]
+            documents = texts
             metadatas = [
                 {
-                    "document_id": chunk["document_id"],
-                    "article_number": chunk["article_number"],
-                    "clause_number": chunk.get("clause_number", 0),
+                    "document_id": str(chunk["document_id"]),
                     "document_title": chunk["document_title"],
-                    "so_hieu": chunk["metadata"]["so_hieu"],
-                    "loai_van_ban": chunk["metadata"]["loai_van_ban"]
+                    "article_number": int(chunk.get("article_number"), 0),
+                    "clause_number": int(chunk.get("clause_number", 0)),
+                    "point_number": str(chunk.get("point_number", "")),
+                    "so_hieu": chunk["metadata"].get("so_hieu", ""),
+                    "loai_van_ban": chunk["metadata"].get("loai_van_ban", ""),
+                    "co_quan_ban_hanh": chunk["metadata"].get("co_quan_ban_hanh", ""),
+                    "trang_thai_hieu_luc": chunk["metadata"].get("trang_thai_hieu_luc", ""),
+                    "chunk_length": len(chunk["text"])
                 } 
                 for chunk in batch_chunks
             ]
