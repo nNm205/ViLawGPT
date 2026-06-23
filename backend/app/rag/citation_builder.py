@@ -7,7 +7,6 @@ class CitationBuilder:
 
         for chunk in chunks:
             metadata = chunk.get("metadata", {})
-
             so_hieu = metadata.get("so_hieu", "")
             document_title = metadata.get("document_title", "")
             article_number = metadata.get("article_number", "")

@@ -15,7 +15,11 @@ class Retriever:
         query: str, 
         top_k: int = 5
     ):
+        # Bước 1. Chuyển query thành embedding vector
         query_embedding = self.model.encode_query(query)
+
+        # Bước 2. Tìm kiếm và trả về top_k (top_k = 5) các embedding vector 
+        #         trong ChromaDB mà liên quan đến query nhất 
         results = self.collection.query(
             query_embeddings=[query_embedding.tolist()],
             n_results=top_k,
@@ -26,6 +30,7 @@ class Retriever:
             ]
         )
 
+        # Bước 3. Hậu xử lý kết quả trả về để lấy ra các thông tin cần thiết
         retrieved_chunks = []
         for i in range(len(results["ids"][0])):
             score = 1 - results["distances"][0][i]

@@ -27,10 +27,8 @@ class RAGPipeline:
             user_prompt=user_prompt
         )
 
-        relevant_docs, relevant_articles = (
-            self.citation_builder.build(
-                retrieved_chunks
-            )
+        relevant_docs, relevant_articles = self.citation_builder.build(
+            retrieved_chunks
         )
 
         return {
